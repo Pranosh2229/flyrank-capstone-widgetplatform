@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     rate_limit_per_ip: str = "20/minute"
     rate_limit_per_widget: str = "100/minute"
     cors_allow_origins: str = "*"
+    notify_force_failure: bool = False
 
     class Config:
         env_file = ".env"

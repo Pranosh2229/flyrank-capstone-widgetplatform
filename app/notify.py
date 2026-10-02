@@ -11,15 +11,13 @@ provider is wired up.
 
 import logging
 
-logger = logging.getLogger("notify")
+from app.config import settings
 
-# Toggle used by tests/the acceptance probe to force this side effect to
-# throw, proving it can't take the submission down with it.
-FORCE_FAILURE = False
+logger = logging.getLogger("notify")
 
 
 def _send(submission_id: str, widget_id: str, email_target: str) -> None:
-    if FORCE_FAILURE:
+    if settings.notify_force_failure:
         raise RuntimeError("simulated notification provider outage")
     logger.info(
         "CONFIRMATION EMAIL -> to=%s submission=%s widget=%s",
