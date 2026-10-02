@@ -1,0 +1,33 @@
+run: docker compose up --build
+seed: python -m scripts.seed
+test: null
+base_url: http://localhost:8000
+endpoints:
+  - method: POST
+    path: /auth/signup
+  - method: POST
+    path: /auth/login
+  - method: POST
+    path: /widgets
+  - method: GET
+    path: /widgets
+  - method: GET
+    path: /widgets/{id}
+  - method: PUT
+    path: /widgets/{id}
+  - method: DELETE
+    path: /widgets/{id}
+  - method: GET
+    path: /widgets/{id}/embed
+  - method: GET
+    path: /widgets/{id}/config
+  - method: GET
+    path: /widget.js
+  - method: POST
+    path: /submissions
+  - method: GET
+    path: /dashboard/submissions
+  - method: GET
+    path: /dashboard/widgets/{id}/stats
+  - method: GET
+    path: /dashboard/stats

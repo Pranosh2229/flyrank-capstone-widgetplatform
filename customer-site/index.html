@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Totally Unrelated Customer Website</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 3rem auto; }
+    .flyrank-widget { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-top: 2rem; }
+    .flyrank-widget label { display: block; margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Pranosh's Travel Blog</h1>
+  <p>This page is served from a different origin than the capstone API
+     (a second local port) -- exactly the "any website" scenario the
+     widget is built for. Pass the demo widget id in the URL, e.g.
+     <code>?widget_id=&lt;id-from-seed-output&gt;</code>, or edit
+     <code>API_BASE</code>/<code>WIDGET_ID</code> below directly.</p>
+
+  <script>
+    var API_BASE = "http://localhost:8000";
+    var WIDGET_ID = new URLSearchParams(location.search).get("widget_id") || "REPLACE_WITH_SEEDED_WIDGET_ID";
+    document.write(
+      '<script src="' + API_BASE + '/widget.js?id=' + WIDGET_ID + '&v=1"><' + '/script>'
+    );
+  </script>
+</body>
+</html>
