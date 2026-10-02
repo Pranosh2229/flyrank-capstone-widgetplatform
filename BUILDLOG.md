@@ -27,6 +27,26 @@ Supabase-auth shape, Docker + Postgres matching BE-04's repository-interface pat
 - Rate limit thresholds and payload size limits are reasonable defaults, not tuned against a
   real traffic profile.
 
-**What was changed after review:** fill in here once Pranosh has actually run it and found
-anything to fix — this section must stay true to what actually happened, not be left as a
-placeholder at submission time.
+**What was changed after review:** the full stack was actually run (`docker compose up --build`)
+and every acceptance probe in Section 13 was fired for real against the live containers — not
+left as drafted-but-unverified curl commands. Three real bugs surfaced and were fixed in that
+pass, all genuine runtime failures, not hypothetical:
+
+1. `passlib[bcrypt]==1.7.4` is incompatible with `bcrypt>=4.1`'s changed internals (a version-detection
+   routine passlib relies on throws `ValueError: password cannot be longer than 72 bytes` on
+   *any* password, even short ones) -- pinned to `bcrypt==4.0.1` to fix.
+2. Pydantic's `EmailStr` needs the separate `email-validator` package, which `pydantic` alone
+   doesn't pull in -- switched `requirements.txt` to `pydantic[email]`.
+3. The `notify` logger's warning/error lines were silently dropped under uvicorn because nothing
+   called `logging.basicConfig()` -- the exact same class of bug hit earlier in this program's
+   BE-09 (Inngest) assignment, where `ctx.logger` needed the same fix. Added
+   `logging.basicConfig(level=logging.INFO)` to `app/main.py`.
+
+`EVIDENCE.md` was then written from the real output of that run, including one honest limitation:
+the real free-tier geo providers (`ip-api.com`, `ipapi.co`) are rate-limited from this shared dev
+environment, so the deterministic half of the Probe 4 fallback proof uses a small local mock
+(`scripts/mock_geo_provider.py`) standing in for provider B, exactly as the brief's Section 3
+constraints suggest -- documented as such in `EVIDENCE.md`, not hidden.
+
+Pranosh has not yet done a second independent read-through of every file himself; that pass should
+happen before submitting, per the brief's "must be able to explain any 2-3 lines" requirement.
